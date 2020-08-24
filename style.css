@@ -1,74 +1,158 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 body {
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    /* overflow: hidden; */
     background-color: #EBEBF3;
     font-family: 'Mulish', sans-serif;
+    color: #0C1226;
 }
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 140px;
+    padding-top: 130px;
 }
 .h3 {
-    margin: 0;
     font-weight: bold;
     font-size: 36px;
-    margin-bottom: 40px;
-
 }
-.pallete-container {
+.text-bold {
+    font-weight: bold;
+}
+.palette-container {
     display: flex;
+    margin: 60px auto 70px;
+    perspective: 800px;
 }
 .message {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60px;
+    height: 50px;
     padding: 15px 42px;
-    border-radius: 160px;
+    border-radius: 25px;
     background-color: #0C1226;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: normal;
     color: #E9E9EC;
     position: absolute;
+    top: -50px;
+    transition: .3s;
+}
+.message.show {
     top: 20px;
 }
-.pallete-card {
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 15px;
-    margin: 15px;
-}
-.pallete-color {
-    width: 190px;
-    height: 250px;
-    background-color: #EEEDF0;
-    border-radius: 5px;
 
+.palette-card {
+    padding: 6px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin: 15px;
+    cursor: pointer;
+    transition: all .3s;
+    transform-style: preserve-3d;
+    box-shadow: 0px 0px 20px -10px rgba(0,0,0,0.36);
 }
-.pallete-title {
-    text-align: center;
-    padding: 20px 0 10px;
-    color: #0C1226;
-    font-weight: bold;
+.palette-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 30px -15px rgba(0,0,0,0.36);
 }
-.card-1 {
+.palette-card:active {
+    box-shadow: 0px 10px 40px -20px rgba(0,0,0,0.36);
+    transform: scale(0.97) translateY(-5px);
+}
+.palette-card.rotate-card {
+    animation-duration: 1s;
+    animation-name: rotateCard;
+    animation-timing-function: linear;
+}
+.palette-color {
+    width: 150px;
+    height: 180px;
     background-color: #EEEDF0;
+    border-radius: 4px;
+    transition: 2s;
 }
-.card-2 {
-    background-color: #A1B5C1;
+.palette-title {
+    text-align: center;
+    padding: 10px 0 4px;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    opacity: 0.70;
+    transition: all 1s;
 }
-.card-3 {
-    background-color: #F9ACA7;
+.hide {
+    opacity: 0;
 }
-.card-4 {
-    background-color: #68747D;
+
+.btn {
+    outline: none;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
-.card-5 {
-    background-color: #CF365F;
+.btn_generate {
+    padding: 22px 120px;
+    margin-bottom: 20px;
+    background: #627C85;
+    box-shadow: 0px 6px 20px -10px #627C85;
+    border-radius: 5px;
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    letter-spacing: .5px;
+    transition: .3s;
 }
+.btn_generate:hover {
+    background-color: #68848e;
+}
+.btn_generate:active,
+.btn_generate[data-active] {
+    background-color: #587078;
+    transform: scale(0.98);
+}
+.btn_generate:disabled {
+    cursor: not-allowed;
+    background-color: #ccc;
+}
+.btn_copy {
+    padding: 13px 20px;
+    background: #FFFFFF;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.7;
+    border-radius: 20px;
+    transition:  .3s;
+}
+.btn_copy:hover {
+    transform: translateY(-2px);
+}
+.btn_copy:active,
+.btn_copy[data-active] {
+    transform: scale(0.98);
+}
+.p {
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+    margin-bottom: 90px;
+}
+
+@keyframes rotateCard {
+    0% {
+        transform:  rotateY(0deg) translateY(0px);
+    }
+    50% {
+        transform:  rotateY(180deg) translateY(-20px);
+    }
+    100% {
+        transform:  rotateY(360deg) translateY(0px);
+    }
+  }
+  
