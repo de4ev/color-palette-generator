@@ -1,6 +1,12 @@
 let palette = ['#EEEDF0', '#A1B5C1', '#F9ACA7', '#68747D', '#CF365F']
 let palette2 = ['#CF365F', '#F9ACA7', '#68747D', '#A1B5C1', '#EEEDF0']
-// let colors = [[238, 237, 240], [161, 181, 193],[249, 172, 167],[104, 116, 125],[207, 54, 95]]
+// let colorsRGB = [[238, 237, 240], [161, 181, 193],[249, 172, 167],[104, 116, 125],[207, 54, 95]]
+
+function rgbToHex(rgbArray) {
+    let [r, g, b] = rgbArray
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
 
 document.addEventListener('keydown', (e) => {
     if (e.code == 'KeyC') {
