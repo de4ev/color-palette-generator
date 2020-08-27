@@ -1,90 +1,141 @@
-let palette = ['#EEEDF0', '#A1B5C1', '#F9ACA7', '#68747D', '#CF365F']
-let palette2 = ['#CF365F', '#F9ACA7', '#68747D', '#A1B5C1', '#EEEDF0']
-// let colorsRGB = [[238, 237, 240], [161, 181, 193],[249, 172, 167],[104, 116, 125],[207, 54, 95]]
+let colors = ['#EEEDF0', '#A1B5C1', '#F9ACA7', '#68747D', '#CF365F']
+let prevColors = [];
+let timerMessage = ''
+
 
 function rgbToHex(rgbArray) {
     let [r, g, b] = rgbArray
     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-  }
+}
 
+function addListeners() {
+    document.addEventListener('keydown', (e) => {
+        if (e.code == 'KeyC') {
+            copyToClipboard(colors)
+            showMessage('Current palette copied to your clipboard');
+            document.querySelector('.btn_copy').setAttribute('data-active', '')
+            setTimeout(() => {
+                document.querySelector('.btn_copy').removeAttribute('data-active', '')
+            }, 200)
+        } else if (e.code == 'Space') {
+            nextPalette()
+            document.querySelector('.btn_generate').setAttribute('data-active', '')
+            setTimeout(() => {
+                document.querySelector('.btn_generate').removeAttribute('data-active', '')
+            }, 200)
+        } else if (e.code == 'KeyZ') {
+            prevPalette()
+        }
+    });
+    document.querySelectorAll('.palette-card').forEach(card => {
+        card.addEventListener('click', function () {
+            copyToClipboard(this.innerText)
+            showMessage(`Color ${this.innerText} copied to your clipboard`);
+        })
+    })
+    document.querySelector('.btn_generate').addEventListener('click', nextPalette)
+    document.querySelector('.btn_copy').addEventListener('click', () => {
+        copyToClipboard(colors)
+        showMessage('Current palette copied to your clipboard');
+    })
+}
 
-document.addEventListener('keydown', (e) => {
-    if (e.code == 'KeyC') {
-        document.querySelector('.btn_copy').setAttribute('data-active', '')
-        setTimeout(()=>{
-            document.querySelector('.btn_copy').removeAttribute('data-active', '')
-        }, 200)
-    } else if (e.code == 'Space') {
-        changeColors()
-        document.querySelector('.btn_generate').setAttribute('data-active', '')
-        setTimeout(()=>{
-            document.querySelector('.btn_generate').removeAttribute('data-active', '')
-        }, 200)
-    }
-})
- 
 function createCards(colors) {
     let container = document.querySelector('.palette-container')
     for (let i = 0; i < colors.length; i++) {
+        let color = colors[i]
+
         let card = document.createElement('div')
         card.classList.add('palette-card')
+
         let cardColor = document.createElement('div')
         cardColor.classList.add('palette-color')
-        cardColor.style.backgroundColor = colors[i];
+        cardColor.style.backgroundColor = color;
+        card.appendChild(cardColor)
+
         let cardTitle = document.createElement('div')
         cardTitle.classList.add('palette-title')
-        cardTitle.innerText = colors[i]
-        card.appendChild(cardColor)
+        cardTitle.innerText = color
         card.appendChild(cardTitle)
+
         container.appendChild(card)
     }
 }
-createCards(palette)
 
-document.querySelectorAll('.palette-card').forEach(card => {
-    card.addEventListener('click', function() {
-        this.classList.toggle('is-flipped');
-    })
-})
+function init() {
+    createCards(colors)
+    addListeners()
+}
 
+async function nextPalette() {
+    document.querySelector('.btn_generate').disabled = true
+    prevColors = colors
+    colors = await getColors()
+    changeColors(colors)
+    document.querySelector('.btn_generate').disabled = false
+}
+function prevPalette() {
+    [prevColors, colors] = [colors, prevColors]
+    changeColors(colors)
+}
 
-let btnGenerate = document.querySelector('.btn_generate')
-btnGenerate.addEventListener('click', changeColors)
-
-function changeColors() {
-    btnGenerate.disabled = true
+function changeColors(palette) {
     let cards = document.querySelectorAll('.palette-card')
     let cardsBg = document.querySelectorAll('.palette-color')
     let cardTitles = document.querySelectorAll('.palette-title')
+    
     for (let i = 0; i < palette.length; i++) {
         setTimeout(() => {
             cards[i].classList.add('rotate-card')
-            cardsBg[i].style.backgroundColor = palette2[i]
+            cardsBg[i].style.backgroundColor = palette[i]
             cardTitles[i].classList.add('hide')
-            setTimeout(()=> {
-                cardTitles[i].innerText = palette2[i]
+            setTimeout(() => {
+                cardTitles[i].innerText = palette[i]
                 cardTitles[i].classList.remove('hide')
-            }, 300)
-        }, i*200)
+            }, 450)
+        }, i * 100)
     }
+
     setTimeout(() => {
         cards.forEach((card) => {
             card.classList.remove('rotate-card')
         })
-        btnGenerate.disabled = false
-    }, 2000)
-    
+    }, 900)
 }
 
-
-
-let timer  = ''
-function showMessage() {
-    if (timer) {
-        clearTimeout(timer)
+function showMessage(message) {
+    if (timerMessage) {
+        clearTimeout(timerMessage)
     }
-    document.querySelector('.message').classList.add('show')
-    timer = setTimeout( () => {
-        document.querySelector('.message').classList.remove('show')
-    },3000)
+    let messageContainer = document.querySelector('.message')
+    messageContainer.innerText = message;
+    messageContainer.classList.add('show')
+    timerMessage = setTimeout(() => {
+        messageContainer.classList.remove('show')
+    }, 3000)
 }
+
+async function getColors() {
+    try {
+        const response = await axios({
+            method: 'post',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            url: 'http://colormind.io/api/',
+            data: {"model": "default"}
+          })
+        return response.data.result.map(colorRGB => rgbToHex(colorRGB))
+    } catch (e) {
+        console.log(`😱 Request failed: ${e}`);
+    }
+}
+
+function copyToClipboard(obj) {
+    var tempInput = document.createElement('input');
+    document.body.appendChild(tempInput)
+    tempInput.value = obj
+    tempInput.select();
+    document.execCommand('copy');
+    tempInput.remove();
+}
+
+init()

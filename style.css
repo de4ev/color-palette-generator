@@ -13,22 +13,27 @@ body {
 }
 .container {
     display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: space-between;
+    padding: 100px 10px 20px;
     flex-direction: column;
     align-items: center;
-    padding-top: 130px;
 }
+
 .h3 {
     font-weight: bold;
     font-size: 36px;
 }
-.text-bold {
-    font-weight: bold;
-}
+
 .palette-container {
     display: flex;
-    margin: 60px auto 70px;
+    /* flex-wrap: wrap; */
+    /* justify-content: space-between; */
+    margin: 60px auto 50px;
     perspective: 800px;
 }
+
 .message {
     display: flex;
     justify-content: center;
@@ -67,7 +72,7 @@ body {
     transform: scale(0.97) translateY(-5px);
 }
 .palette-card.rotate-card {
-    animation-duration: 1s;
+    animation-duration: .5s;
     animation-name: rotateCard;
     animation-timing-function: linear;
 }
@@ -76,7 +81,7 @@ body {
     height: 180px;
     background-color: #EEEDF0;
     border-radius: 4px;
-    transition: 2s;
+    transition: 1s;
 }
 .palette-title {
     text-align: center;
@@ -85,7 +90,7 @@ body {
     font-weight: bold;
     text-transform: uppercase;
     opacity: 0.70;
-    transition: all 1s;
+    transition: all .4s;
 }
 .hide {
     opacity: 0;
@@ -141,7 +146,16 @@ body {
     font-size: 16px;
     line-height: 30px;
     text-align: center;
-    margin-bottom: 70px;
+    margin-bottom: 40px;
+}
+footer {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #999;
+}
+.footer-link {
+    text-decoration: none;
+    color: inherit;
 }
 
 @keyframes rotateCard {
@@ -149,10 +163,10 @@ body {
         transform:  rotateY(0deg) translateY(0px);
     }
     50% {
-        transform:  rotateY(180deg) translateY(-20px);
+        transform:  rotateY(90deg) translateY(-20px);
     }
     100% {
-        transform:  rotateY(360deg) translateY(0px);
+        transform:  rotateY(180deg) translateY(0px);
     }
   }
   
