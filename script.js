@@ -108,7 +108,7 @@ function showMessage(message) {
         clearTimeout(timerMessage)
     }
     let messageContainer = document.querySelector('.message')
-    messageContainer.innerText = message;
+    messageContainer.textContent = message;
     messageContainer.classList.add('show')
     timerMessage = setTimeout(() => {
         messageContainer.classList.remove('show')
